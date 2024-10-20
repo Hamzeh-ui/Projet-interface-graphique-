@@ -1,0 +1,183 @@
+import tkinter as tk
+from tkinter import Menu, messagebox
+
+# Initialisation des structures de données pour le graphe
+sommets = []
+aretes = []
+matrice_adjacence = []
+
+# Fonction pour afficher des messages dans une fenêtre pop-up
+def show_message(title, message):
+    messagebox.showinfo(title, message)
+
+# Fonction pour créer un sommet
+def creer_sommet():
+    sommet = f"Sommet {len(sommets) + 1}"
+    sommets.append(sommet)
+    show_message("Création de Sommet", f"Le {sommet} a été créé.")
+    print(f"Sommets actuels : {sommets}")
+
+# Fonction pour créer une arête
+def creer_arete():
+    if len(sommets) < 2:
+        show_message("Erreur", "Il faut au moins 2 sommets pour créer une arête.")
+        return
+    arete = (sommets[-2], sommets[-1])  # Crée une arête entre les deux derniers sommets
+    aretes.append(arete)
+    show_message("Création d'Arête", f"L'arête {arete} a été créée.")
+    print(f"Arêtes actuelles : {aretes}")
+
+# Fonction pour afficher le graphe
+def afficher_graphe():
+    if not sommets:
+        show_message("Graphe", "Le graphe est vide.")
+    else:
+        graphe_info = f"Sommets : {sommets}\nArêtes : {aretes}"
+        show_message("Affichage du Graphe", graphe_info)
+    print(f"Graphe : Sommets={sommets}, Arêtes={aretes}")
+
+# Fonction pour afficher une chaîne
+def afficher_chaine():
+    chaine = " -> ".join(sommets)
+    if not chaine:
+        show_message("Chaîne", "Aucune chaîne trouvée (aucun sommet).")
+    else:
+        show_message("Affichage de Chaîne", f"Chaîne : {chaine}")
+    print(f"Chaîne : {chaine}")
+
+# Fonction pour afficher une matrice d'adjacence
+def afficher_matrice():
+    n = len(sommets)
+    matrice_adjacence = [[0] * n for _ in range(n)
+    if n == 0:
+        show_message("Matrice d'adjacence", "Le graphe est vide, pas de matrice d'adjacence.")
+        return
+    
+    # Initialiser la matrice d'adjacence à zéro
+    matrice_adjacence = [[0] * n for _ in range(n)]
+    
+    # Remplir la matrice d'adjacence en fonction des arêtes
+    for arete in aretes:
+        i = sommets.index(arete[0])
+        j = sommets.index(arete[1])
+        matrice_adjacence[i][j] = 1
+        matrice_adjacence[j][i] = 1  # Si le graphe est non orienté
+    
+    # Afficher la matrice sous forme lisible
+    matrice_str = "\n".join([" ".join(map(str, row)) for row in matrice_adjacence])
+    show_message("Matrice d'adjacence", f"Matrice d'adjacence :\n{matrice_str}")
+    print(f"Matrice d'adjacence :\n{matrice_str}")
+
+# Fonction pour exécuter l'algorithme du plus court chemin (implémentation simple)
+def plus_court_chemin():
+    if not sommets:
+        show_message("Plus court chemin", "Le graphe est vide.")
+        return
+    # Ici, on pourrait implémenter l'algorithme de Dijkstra ou autre, mais pour simplifier :
+    show_message("Exécution", "Calcul du plus court chemin exécuté (exemple simplifié).")
+    print("Exécution du plus court chemin (fonction non implémentée).")
+
+# Fonction pour exécuter l'algorithme de coloration (implémentation simple)
+def coloration():
+    if not sommets:
+        show_message("Coloration", "Le graphe est vide.")
+        return
+    # On peut utiliser un algorithme de coloration de graphe ici, mais pour simplifier :
+    show_message("Exécution", "Coloration du graphe exécutée (exemple simplifié).")
+    print("Exécution de la coloration (fonction non implémentée).")
+
+# Fonction pour gérer les clics de sous-menu et appeler les fonctions appropriées
+def on_menu_click(action):
+    if action == "Nouveau":
+        creer_sommet()
+    elif action == "Ouvrir":
+        show_message("Ouvrir", "Ouvrir un fichier (fonction non implémentée).")
+    elif action == "Enregistrer":
+        show_message("Enregistrer", "Enregistrer le projet (fonction non implémentée).")
+    elif action == "Enregistrer sous":
+        show_message("Enregistrer sous", "Enregistrer sous (fonction non implémentée).")
+    elif action == "Fermer":
+        root.quit()
+    elif action == "Sommet":
+        creer_sommet()
+    elif action == "Arête":
+        creer_arete()
+    elif action == "Graphe":
+        afficher_graphe()
+    elif action == "Chaînes":
+        afficher_chaine()
+    elif action == "Matrices":
+        afficher_matrice()
+    elif action == "Plus court chemin":
+        plus_court_chemin()
+    elif action == "Coloration":
+        coloration()
+    elif action == "Édition de Graphe":
+        show_message("Édition", "Édition du graphe (fonction non implémentée).")
+    print(f"Action {action} sélectionnée")
+
+# Fonction pour afficher le sous-menu lors d'un clic sur un bouton
+def show_menu(button, menu):
+    try:
+        menu.tk_popup(button.winfo_rootx(), button.winfo_rooty() + button.winfo_height())
+    finally:
+        menu.grab_release()
+
+# Fonction pour créer un menu
+def create_menu(menu_name):
+    if menu_name == "Fichier":
+        fichier_menu = Menu(root, tearoff=0)
+        fichier_menu.add_command(label="Nouveau", command=lambda: on_menu_click("Nouveau"))
+        fichier_menu.add_command(label="Ouvrir", command=lambda: on_menu_click("Ouvrir"))
+        fichier_menu.add_command(label="Enregistrer", command=lambda: on_menu_click("Enregistrer"))
+        fichier_menu.add_command(label="Enregistrer sous", command=lambda: on_menu_click("Enregistrer sous"))
+        fichier_menu.add_command(label="Fermer", command=root.quit)
+        return fichier_menu
+
+    elif menu_name == "Création":
+        creation_menu = Menu(root, tearoff=0)
+        creation_menu.add_command(label="Sommet", command=lambda: on_menu_click("Sommet"))
+        creation_menu.add_command(label="Arête", command=lambda: on_menu_click("Arête"))
+        return creation_menu
+
+    elif menu_name == "Affichage":
+        affichage_menu = Menu(root, tearoff=0)
+        affichage_menu.add_command(label="Graphe", command=lambda: on_menu_click("Graphe"))
+        affichage_menu.add_command(label="Chaînes", command=lambda: on_menu_click("Chaînes"))
+        affichage_menu.add_command(label="Matrices", command=lambda: on_menu_click("Matrices"))
+        return affichage_menu
+
+    elif menu_name == "Exécution":
+        execution_menu = Menu(root, tearoff=0)
+        execution_menu.add_command(label="Plus court chemin", command=lambda: on_menu_click("Plus court chemin"))
+        execution_menu.add_command(label="Coloration", command=lambda: on_menu_click("Coloration"))
+        return execution_menu
+
+    elif menu_name == "Édition":
+        edition_menu = Menu(root, tearoff=0)
+        edition_menu.add_command(label="Graphe", command=lambda: on_menu_click("Édition de Graphe"))
+        return edition_menu
+
+# Créer la fenêtre principale
+root = tk.Tk()
+root.title("Interface avec Sous-menus et Fonctions")
+root.geometry("400x300")
+
+# Création des boutons du menu principal
+button_fichier = tk.Button(root, text="Fichier", width=20, command=lambda: show_menu(button_fichier, create_menu("Fichier")))
+button_fichier.pack(pady=5)
+
+button_creation = tk.Button(root, text="Création", width=20, command=lambda: show_menu(button_creation, create_menu("Création")))
+button_creation.pack(pady=5)
+
+button_affichage = tk.Button(root, text="Affichage", width=20, command=lambda: show_menu(button_affichage, create_menu("Affichage")))
+button_affichage.pack(pady=5)
+
+button_execution = tk.Button(root, text="Exécution", width=20, command=lambda: show_menu(button_execution, create_menu("Exécution")))
+button_execution.pack(pady=5)
+
+button_edition = tk.Button(root, text="Édition", width=20, command=lambda: show_menu(button_edition, create_menu("Édition")))
+button_edition.pack(pady=5)
+
+# Lancer la boucle principale de l'interface
+root.mainloop()

@@ -1,0 +1,54 @@
+import tkinter as tk
+from tkinter import Menu
+
+# Fonction pour gérer les clics de boutons du menu
+def on_menu_click(action):
+    print(f"Menu {action} selected")
+
+# Créer la fenêtre principale
+root = tk.Tk()
+root.title("Interface avec Menu")
+
+# Définir les dimensions de la fenêtre
+root.geometry("400x300")
+
+# Création de la barre de menu
+menu_bar = Menu(root)
+
+# Ajouter le menu Fichier
+fichier_menu = Menu(menu_bar, tearoff=0)
+fichier_menu.add_command(label="Nouveau", command=lambda: on_menu_click("Nouveau"))
+fichier_menu.add_command(label="Ouvrir", command=lambda: on_menu_click("Ouvrir"))
+fichier_menu.add_command(label="Enregistrer", command=lambda: on_menu_click("Enregistrer"))
+fichier_menu.add_separator()
+fichier_menu.add_command(label="Quitter", command=root.quit)
+menu_bar.add_cascade(label="Fichier", menu=fichier_menu)
+
+# Ajouter le menu Création
+creation_menu = Menu(menu_bar, tearoff=0)
+creation_menu.add_command(label="Créer un projet", command=lambda: on_menu_click("Créer un projet"))
+menu_bar.add_cascade(label="Création", menu=creation_menu)
+
+# Ajouter le menu Affichage
+affichage_menu = Menu(menu_bar, tearoff=0)
+affichage_menu.add_command(label="Mode plein écran", command=lambda: on_menu_click("Mode plein écran"))
+affichage_menu.add_command(label="Zoom", command=lambda: on_menu_click("Zoom"))
+menu_bar.add_cascade(label="Affichage", menu=affichage_menu)
+
+# Ajouter le menu Exécution
+execution_menu = Menu(menu_bar, tearoff=0)
+execution_menu.add_command(label="Exécuter", command=lambda: on_menu_click("Exécuter"))
+menu_bar.add_cascade(label="Exécution", menu=execution_menu)
+
+# Ajouter le menu Édition
+edition_menu = Menu(menu_bar, tearoff=0)
+edition_menu.add_command(label="Couper", command=lambda: on_menu_click("Couper"))
+edition_menu.add_command(label="Copier", command=lambda: on_menu_click("Copier"))
+edition_menu.add_command(label="Coller", command=lambda: on_menu_click("Coller"))
+menu_bar.add_cascade(label="Édition", menu=edition_menu)
+
+# Ajouter la barre de menu à la fenêtre
+root.config(menu=menu_bar)
+
+# Lancer la boucle principale de l'interface
+root.mainloop()
